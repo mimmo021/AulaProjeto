@@ -19,8 +19,11 @@ public class ReceitaActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receita);
 
+        //Viewpager controla o swiping entre diferentes paginas
+        //seu conteudo vem do pageAdapter
         ViewPager viewPager = (ViewPager)findViewById(R.id.viewPager);
         //paginasAdapter classe interna
+
         viewPager.setAdapter(new PaginasAdapter
                 (getSupportFragmentManager()));
 
@@ -28,11 +31,14 @@ public class ReceitaActivity extends AppCompatActivity
 
         //tabLayout.setTabMode(TableLayout.MODE);
         //tabLayout.setTabGravity(TableLayout.GRAVITY_FILL);
+
+        // hookin up com apenas um método
         tabLayout.setupWithViewPager(viewPager);
    }
 
     @Override
     public void clicouNaReceita(Receita receita) {
+        //ListaReceitaFragment onpostExecute está tablet
         if(getResources().getBoolean(R.bool.fone)){
         Intent it = new Intent(this, DetalheReceitaActivity.class);
         it.putExtra("receita", receita);
@@ -48,12 +54,16 @@ public class ReceitaActivity extends AppCompatActivity
         }
 
     private class PaginasAdapter extends FragmentPagerAdapter {
-
+        //fragmentPageAdapter mantem na memória
+        //fragmentstateAdapter destroi e recria fragments quando necessário apenas salvando o estado.
+        //nesse casso o fragmentPageAdapter resolve por possuir poucas paginas reduzindo a necessidade de memória
 
         public PaginasAdapter(FragmentManager fm) {
             super(fm);
         }
 
+
+        //retorna o fragment associado a cada posição
         @Override
         public Fragment getItem(int position) {
             if (position ==0){
@@ -68,6 +78,7 @@ public class ReceitaActivity extends AppCompatActivity
             return 2;
         }
 
+        //rotorna os titulos das páginas associadas.
         @Override
         public CharSequence getPageTitle(int position) {
             return position == 0 ? "Receitas" : "Favoritos";

@@ -32,6 +32,7 @@ import dfj.aulaprojeto.model.Receita;
  */
 public class ListaReceitaFragment extends ListFragment
         implements SwipeRefreshLayout.OnRefreshListener {
+    //The SwipeRefreshLayout should be used whenever the user can refresh the contents of a view via a vertical swipe gesture
 
     List<Receita> mReceitas;
     ReceitaAdapter mAdapter;
@@ -79,12 +80,17 @@ public class ListaReceitaFragment extends ListFragment
 
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
+            mSwipe.setRefreshing(true);
             if (mTask == null) {
                 mTask = new ReceitaTask();
+
                 mTask.execute();
+                mSwipe.setRefreshing(true);
+            }else{
+                mSwipe.setRefreshing(false);
             }
         }else{
-                mSwipe.setRefreshing(false);
+            mSwipe.setRefreshing(false);
                 Toast.makeText(getActivity(), R.string.msg_sem_conexao,
                         Toast.LENGTH_SHORT).show();
             }
@@ -114,7 +120,12 @@ public class ListaReceitaFragment extends ListFragment
         carregarReceitas();
     }
 
+/*The three types used by an asynchronous task are the following:
 
+            Params, the type of the parameters sent to the task upon execution.
+            Progress, the type of the progress units published during the background computation.
+            Result, the type of the result of the background computation.
+*/
 
     class ReceitaTask extends AsyncTask<Void,Void,Dados> {
 
@@ -129,7 +140,7 @@ public class ListaReceitaFragment extends ListFragment
 
             Response response = null;
             try {
-                Thread.sleep(10000);
+                Thread.sleep(1000);
 
                 response = client.newCall(request).execute();
                 String s = response.body().string();
@@ -150,8 +161,10 @@ public class ListaReceitaFragment extends ListFragment
             super.onPostExecute(dados);
             if (dados != null && dados.categorias != null) {
                 mReceitas.clear();
+
                 for (Categoria categoria : dados.categorias) {
                     mReceitas.addAll(categoria.receitas);
+
                 }
                 mAdapter.notifyDataSetChanged();
 
@@ -160,10 +173,18 @@ public class ListaReceitaFragment extends ListFragment
                 }
 
             }else{
+
                 Toast.makeText(getActivity(), R.string.msg_erro_geral,
                         Toast.LENGTH_SHORT).show();
+
             }
             mSwipe.setRefreshing(false);
         }
     }
 }
+//No método que está baixando o JSON (doInBackground)
+// temos um try/catch, para que caso ocorra algum problema,
+// a exceção seja capturada. Nesse caso o método retornará null.
+// Assim, se no método onPostExecute, o parâmetro result vier
+// nulo é porque houve algum problema. E nesse caso, mostrar
+// uma mensagem pro usuário.

@@ -76,13 +76,20 @@ public class DetalheReceitaFragment extends Fragment {
         return layout;
     }
 
+
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mDao = new ReceitaDAO(getActivity());
     }
 
-
+    //daqui vai pro onstart da activity
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -118,6 +125,7 @@ public class DetalheReceitaFragment extends Fragment {
             }
             atualizarIemMenu(!favorito);
             Bus bus = ((ReceitaApp)getActivity().getApplication()).getBus();
+            //aciona AtualizarListafavorito
             bus.post(mReceita);
         }
         return super.onOptionsItemSelected(item);

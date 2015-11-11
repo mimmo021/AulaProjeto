@@ -25,3 +25,16 @@ public class DetalheReceitaActivity extends AppCompatActivity {
     }
 }
 
+
+
+
+
+
+//onstart fragment
+//onstart activity
+//onresume activity
+//onresume fragment
+//onpause frag
+//onpause act
+//onstop frag
+//onstop act

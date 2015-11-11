@@ -5,3 +5,5 @@ import dfj.aulaprojeto.model.Receita;
 interface AoClicarNaRceita{
         void clicouNaReceita(Receita receita);
     }
+
+//metodo da Activit main

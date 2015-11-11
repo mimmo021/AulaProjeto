@@ -79,6 +79,7 @@ public class ListaReceitaFavoritoFragment extends ListFragment {
         ReceitaDAO dao = new ReceitaDAO(getActivity());
         mReceitas.clear();
         mReceitas.addAll(dao.listar());
+        //chamamos o notifyDatasetChanged para que a ListView seja redesenhada
         mAdapter.notifyDataSetChanged();
     }
 
